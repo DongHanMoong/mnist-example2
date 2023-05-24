@@ -33,7 +33,7 @@ def train(model, train_epoch, train_loader, local_rank, criterion):
     model.train()
     loss_acc = 0
     for epoch in range(train_epoch):
-        for batch_idx, (data, target) in enumerate(train_loader):
+        for batch_idx, (data, target) in enumerate(tqdm(train_loader)):
             data = data.to(local_rank)
             target = target.to(local_rank)
             optimizer.zero_grad()
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         batch_size=batch_size,
     )
 
-    for learning_rate in [0.01, 0.001, 0.0001, 0.00001, 0.000001]:
+    for learning_rate in [0.01]:
         # for learning_rate in [0.01, 0.001]:
         model = resnet18(10)
         print(f"start training for lr {learning_rate}")
@@ -142,7 +142,7 @@ if __name__ == "__main__":
         model = DDP(model, device_ids=[args.local_rank])
         criterion = torch.nn.NLLLoss()
         optimizer = optim.SGD(model.parameters(), lr=learning_rate)
-        train(model, 5, train_loader, args.local_rank, criterion)
+        train(model, 10, train_loader, args.local_rank, criterion)
         if args.local_rank == 0:
             acc = test(model, test_loader, args.local_rank, criterion)
         tags = {"language": "pytorch", "size": "0.5x", "learning_rate": learning_rate}
