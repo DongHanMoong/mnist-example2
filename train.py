@@ -3,6 +3,7 @@
 # Import necessary files
 import os
 import torch
+from tqdm import tqdm
 import tvault
 import torch.distributed as dist
 import torch.optim as optim
