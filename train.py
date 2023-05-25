@@ -31,6 +31,9 @@ log_interval = 1
 
 
 def train(model, train_epoch, train_loader, local_rank, criterion):
+    import ipdb
+
+    ipdb.set_trace()
     model.train()
     loss_acc = 0
     for epoch in range(train_epoch):
@@ -134,7 +137,7 @@ if __name__ == "__main__":
         batch_size=batch_size,
     )
 
-    for learning_rate in [0.01]:
+    for learning_rate in [0.001]:
         # for learning_rate in [0.01, 0.001]:
         model = resnet18(10)
         print(f"start training for lr {learning_rate}")
