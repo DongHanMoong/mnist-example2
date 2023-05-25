@@ -31,12 +31,9 @@ log_interval = 1
 
 
 def train(model, train_epoch, train_loader, local_rank, criterion):
-    import ipdb
-
-    ipdb.set_trace()
     model.train()
-    loss_acc = 0
     for epoch in range(train_epoch):
+        loss_acc = 0
         for batch_idx, (data, target) in enumerate(tqdm(train_loader)):
             data = data.to(local_rank)
             target = target.to(local_rank)
@@ -47,6 +44,8 @@ def train(model, train_epoch, train_loader, local_rank, criterion):
             loss.backward()
             optimizer.step()
         if epoch % log_interval == 0:
+            print(loss_acc)
+            print(len(train_loader))
             print(f"Train Epoch: {epoch} \tLoss: {loss_acc / len(train_loader)}")
 
 
