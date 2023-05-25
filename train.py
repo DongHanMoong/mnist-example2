@@ -143,7 +143,7 @@ if __name__ == "__main__":
         model = DDP(model, device_ids=[args.local_rank])
         criterion = torch.nn.NLLLoss()
         optimizer = optim.SGD(model.parameters(), lr=learning_rate)
-        train(model, 10, train_loader, args.local_rank, criterion)
+        train(model, 3, train_loader, args.local_rank, criterion)
         if args.local_rank == 0:
             acc = test(model, test_loader, args.local_rank, criterion)
         tags = {"language": "pytorch", "size": "0.5x", "learning_rate": learning_rate}
