@@ -40,12 +40,10 @@ def train(model, train_epoch, train_loader, local_rank, criterion):
             optimizer.zero_grad()
             output = model(data)
             loss = criterion(output, target)
-            loss_acc += loss.item() / batch_size
+            loss_acc += loss.item()
             loss.backward()
             optimizer.step()
         if epoch % log_interval == 0:
-            print(loss_acc)
-            print(len(train_loader))
             print(f"Train Epoch: {epoch} \tLoss: {loss_acc / len(train_loader)}")
 
 
@@ -58,10 +56,10 @@ def test(model, test_loader, local_rank, criterion):
             data = data.to(local_rank)
             target = target.to(local_rank)
             output = model(data)
-            test_loss += criterion(output, target).item()  # size avg?
+            test_loss += criterion(output, target).item()  # avg
             pred = output.data.max(1, keepdim=True)[1]
             correct += pred.eq(target.data.view_as(pred)).sum()
-    test_loss /= len(test_loader.dataset)
+    test_loss /= len(test_loader)
     print(
         "\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n".format(
             test_loss, correct, len(test_loader.dataset), 100.0 * correct / len(test_loader.dataset)
